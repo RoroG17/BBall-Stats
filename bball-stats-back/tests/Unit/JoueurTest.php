@@ -70,4 +70,35 @@ class JoueurTest extends TestCase
         $joueur->deleteJoueur();
         $this->assertDatabaseMissing('joueurs', ['licence' => 'LIC126']);
     }
+
+    public function test_get_date_anniversaire()
+    {
+        // Création de joueurs avec différentes dates de naissance
+        Joueur::createJoueur([
+            'licence' => 'LIC200',
+            'nom' => 'Anniv1',
+            'prenom' => 'Test',
+            'civilite' => 'M',
+            'date_naissance' => '2000-01-01',
+            'photo' => null,
+        ]);
+        Joueur::createJoueur([
+            'licence' => 'LIC201',
+            'nom' => 'Anniv2',
+            'prenom' => 'Test',
+            'civilite' => 'F',
+            'date_naissance' => '2000-12-31',
+            'photo' => null,
+        ]);
+
+        $result = Joueur::getDateAnniversaire();
+        $this->assertNotEmpty($result);
+        $this->assertTrue($result->contains('licence', 'LIC200'));
+        $this->assertTrue($result->contains('licence', 'LIC201'));
+        // Vérifie que le champ date_anniversaire est bien un objet Carbon et dans le futur
+        foreach ($result as $joueur) {
+            $this->assertInstanceOf(\Carbon\Carbon::class, $joueur->date_anniversaire);
+            $this->assertTrue($joueur->date_anniversaire->greaterThanOrEqualTo(now()));
+        }
+    }
 } 

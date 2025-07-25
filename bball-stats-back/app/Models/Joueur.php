@@ -104,6 +104,11 @@ class Joueur extends Model
         return $this->delete();
     }
 
+    /**
+     * Récupère la liste des joueurs avec la date de leur prochain anniversaire (dans l'année en cours ou la suivante).
+     *
+     * @return \Illuminate\Support\Collection Liste des joueurs avec les champs licence, nom, prenom, et date_anniversaire (objet Carbon)
+     */
     public static function getDateAnniversaire () {
         $anniversaire = self::select('licence', 'nom', 'prenom', 'date_naissance AS date_anniversaire')
                                 ->get();
