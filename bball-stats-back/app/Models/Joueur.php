@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -101,5 +102,23 @@ class Joueur extends Model
      */
     public function deleteJoueur() {
         return $this->delete();
+    }
+
+    public static function getDateAnniversaire () {
+        $anniversaire = self::select('licence', 'nom', 'prenom', 'date_naissance AS date_anniversaire')
+                                ->get();
+        
+        foreach ($anniversaire as $a) {
+            $date = Carbon::parse($a->date_anniversaire);
+            $now = Carbon::now();
+            $date->setYear($now->year);
+            if ($date < $now) {
+                $date->addYear(1);
+            }
+
+            $a->date_anniversaire = $date;
+        }
+
+        return $anniversaire;
     }
 }
