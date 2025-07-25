@@ -70,6 +70,15 @@ class Matchs extends Model
         return self::where('Id_Match', $id)->exists();
     }
 
+    public static function getStatsMatch($id) {
+        return self::join('jouer', 'matchs.Id_Match', 'jouer.Id_Match')
+                    ->join('joueurs', 'jouer.licence', 'joueurs.licence')
+                    ->join('equipes', 'matchs.Id_Equipe', 'equipe.Id_Equipe')
+                    ->where('matchs.Id_Match', $id)
+                    ->select('joueurs.*', 'jouer.*', 'matchs.*', 'equipes.nom as equipe')
+                    ->get();
+    }
+
     /**
      * Récupère les matchs d'une saison donnée.
      * @param int $id_saison

@@ -62,6 +62,15 @@ class Joueur extends Model
         return self::where('licence', $licence)->exists();
     }
 
+    public static function getStatsJoueur($licence) {
+        return self::join('jouer', 'joueurs.licence', 'jouer.licence')
+                    ->join('matchs', 'matchs.Id_Match', 'jouer.Id_Match')
+                    ->join('equipes', 'matchs.Id_Equipe', 'equipe.Id_Equipe')
+                    ->where('joueurs.licence', $licence)
+                    ->select('joueurs.*', 'jouer.*', 'matchs.*', 'equipes.nom as equipe')
+                    ->get();
+    }
+
     /**
      * Crée un nouveau joueur.
      *
