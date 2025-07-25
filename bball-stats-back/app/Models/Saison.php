@@ -60,6 +60,16 @@ class Saison extends Model
         return self::where('Id_Saison', $id)->exists();
     }
 
+    public static function getStatsSaison($id) {
+        return self::join('matchs', 'saison.Id_Saison', 'matchs.Id_Saison')
+                    ->join('jouer', 'matchs.Id_Match', 'jouer.Id_Match')
+                    ->join('joueurs', 'jouer.licence', 'joueurs.licence')
+                    ->join('equipes', 'matchs.Id_Equipe', 'equipe.Id_Equipe')
+                    ->where('saisons.Id_Saison', $id)
+                    ->select('joueurs.*', 'jouer.*', 'matchs.*', 'equipes.nom as equipe')
+                    ->get();
+    }
+
     /**
      * Crée une nouvelle saison.
      *
