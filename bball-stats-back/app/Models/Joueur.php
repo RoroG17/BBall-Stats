@@ -130,7 +130,7 @@ class Joueur extends Model
                 $date->addYear(1);
             }
 
-            $a->date_anniversaire = $date;
+            $a->date_anniversaire = $date->format('Y-m-d');
         }
 
         return $anniversaire;

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppController;
 use App\Http\Controllers\EquipeResource;
 use App\Http\Controllers\JouerResource;
 use App\Http\Controllers\JoueurResource;
@@ -16,3 +17,5 @@ Route::resource('/api/joueurs', JoueurResource::class);
 Route::resource('api/saisons', SaisonResource::class);
 Route::resource('api/matchs', MatchResource::class);
 Route::resource('api/stats', JouerResource::class);
+
+Route::get('/accueil', [AppController::class, 'accueil']);

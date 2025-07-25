@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -77,6 +78,20 @@ class Matchs extends Model
                     ->where('matchs.Id_Match', $id)
                     ->select('joueurs.*', 'jouer.*', 'matchs.*', 'equipes.nom as equipe')
                     ->get();
+    }
+
+    public static function getNextMatch() {
+        return self::join('equipes', 'matchs.Id_Equipe', 'equipes.Id_Equipe')
+                    ->where('date_match', '>=', Carbon::now())
+                    ->orderBy('date_match')
+                    ->first();
+    }
+
+    public static function getPreviousMatch() {
+        return self::join('equipes', 'matchs.Id_Equipe', 'equipes.Id_Equipe')
+                    ->where('date_match', '<', Carbon::now())
+                    ->orderByDESC('date_match')
+                    ->first();
     }
 
     /**
