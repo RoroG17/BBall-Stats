@@ -1,5 +1,5 @@
 <template>
-    <q-card class="cursor-pointer matchCard" @click="goToMatchStats(props.Id_Match)">
+    <q-card class="cursor-pointer matchCard" @click="goToMatchStats(props.idMatch)">
       <q-card-section class="bg-primary text-white text-center text-h6">
         Journée {{ props.numero }} - {{ formattedDate }}
       </q-card-section>
@@ -28,11 +28,11 @@
   
   <script setup lang="ts">
   import type { MatchType } from './types/MatchType';
-  
-  const props = defineProps<MatchType>();
+
+    const props = defineProps<MatchType>();
   
   // Formatage de la date (tu peux adapter selon ton format préféré)
-  const formattedDate = props.date_match.toLocaleDateString("fr-FR", {
+  const formattedDate = props.dateMatch.toLocaleDateString("fr-FR", {
     year: 'numeric',
     month: 'long',
     day: 'numeric'

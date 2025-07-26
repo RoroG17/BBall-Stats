@@ -2,54 +2,62 @@
   <div class="q-pa-md accueil">
     <h3>Match Précédent</h3>
     <Match
-      v-if="previousGame"
-      :id="previousGame.Id_Match"
-      :date="new Date(previousGame.date_match)"
-      :numero="previousGame.numero"
-      :equipe-dom="previousGame.equipeDom"
-      :equipe-ext="previousGame.equipeExt"
-      :logo-dom="previousGame.logoDom"
-      :logo-ext="previousGame.logoExt"
-      :score-dom="previousGame.scoreDom"
-      :score-ext="previousGame.scoreExt"
+      v-if="lastGame"
+      :idMatch="lastGame.idMatch"
+      :numero="lastGame.numero"
+      :dateMatch="new Date(lastGame.dateMatch)"
+      :equipeDom="lastGame.equipeDom"
+      :equipeExt="lastGame.equipeExt"
+      :logoDom="lastGame.logoDom"
+      :logoExt="lastGame.logoExt"
+      :scoreDom="lastGame.scoreDom"
+      :scoreExt="lastGame.scoreExt"
     />
 
-    <h3>Match Suivant</h3>
+    <h3>Prochain Match</h3>
     <Match
       v-if="nextGame"
-      :id="nextGame.Id_Match"
-      :date="new Date(nextGame.date_match)"
+      :idMatch="nextGame.idMatch"
       :numero="nextGame.numero"
-      :equipe-dom="nextGame.equipeDom"
-      :equipe-ext="nextGame.equipeExt"
-      :logo-dom="nextGame.logoDom"
-      :logo-ext="nextGame.logoExt"
+      :dateMatch="new Date(nextGame.dateMatch)"
+      :equipeDom="nextGame.equipeDom"
+      :equipeExt="nextGame.equipeExt"
+      :logoDom="nextGame.logoDom"
+      :logoExt="nextGame.logoExt"
+      :scoreDom="nextGame.scoreDom"
+      :scoreExt="nextGame.scoreExt"
     />
-
-    <CalendrierSaison />
+    <q-card class="q-mt-md" style="width: 80%;">
+      <div class="row justify-center items-center full-height q-mb-md">
+        <CalendrierSaison />
+      </div>
+    </q-card>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import Match from '../components/MatchCard.vue';
 import CalendrierSaison from '../components/CalendrierSaison.vue';
-import type { MatchType } from 'src/components/types/MatchType';
+import type { MatchType } from '../components/types/MatchType';
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
-
 
 const nextGame = ref<MatchType | null>(null);
-const previousGame = ref<MatchType | null>(null);
+const lastGame = ref<MatchType | null>(null);
 
-onMounted(async () => {
+const fetchGames = async () => {
   try {
-    const response = await axios.get('http://127.0.0.1:8000/accueil');
+    const response = await axios.get('http://localhost:8000/accueil');
     nextGame.value = response.data.nextGame;
-    previousGame.value = response.data.previousGame;
+    lastGame.value = response.data.previousGame;
+    console.log('Next Game:', nextGame.value);
+    console.log('Last Game:', lastGame.value);
   } catch (error) {
-    console.error('Erreur lors de la récupération des matchs', error);
+    console.error('Error fetching games:', error);
   }
-});
+};
+
+void fetchGames();
 </script>
 
 <style scoped>

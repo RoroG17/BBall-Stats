@@ -16,10 +16,10 @@ class MatchsFactory extends Factory
         return [
             'date_match' => $this->faker->date(),
             'numero' => $this->faker->unique()->numberBetween(1, 100),
-            'domicile' => $this->faker->boolean(),
-            'score_f' => $this->faker->numberBetween(40, 120),
-            'score_a' => $this->faker->numberBetween(40, 120),
-            'Id_Equipe' => Equipe::factory(),
+            'score_domicile' => $this->faker->numberBetween(40, 120),
+            'score_exterieur' => $this->faker->numberBetween(40, 120),
+            'equipe_domicile' => Equipe::factory(),
+            'equipe_exterieur' => Equipe::factory(),
             'Id_Saison' => Saison::factory(),
         ];
     }

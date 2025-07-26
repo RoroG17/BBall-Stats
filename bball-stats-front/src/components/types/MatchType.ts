@@ -1,13 +1,12 @@
 export type MatchType = {
-    Id_Match: number;
-    date_match: Date;
+    idMatch: number;
+    dateMatch: Date;
     numero: number;
     equipeDom: string;
     equipeExt: string;
-    logoDom : string;
-    logoExt : string;
-    scoreDom? : number;
-    scoreExt? : number;
-
-  };
+    logoDom: string;
+    logoExt: string;
+    scoreDom?: number | undefined;
+    scoreExt?: number | undefined;
+};
   
