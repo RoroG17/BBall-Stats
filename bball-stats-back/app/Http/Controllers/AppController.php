@@ -12,13 +12,13 @@ class AppController extends Controller
         $dernierMatch = Matchs::getPreviousMatch();
         $prochainMatch = Matchs::getNextMatch();
         $dateAnniversaire = Joueur::getDateAnniversaire();
-        //$dateMatch = Matchs::getAllMatchs();
+        $dateMatch = Matchs::getAllMatchs();
 
         return response()->json([
             'previousGame' => $dernierMatch,
             'nextGame' => $prochainMatch,
             'birthday' => $dateAnniversaire,
-           // 'matchday' => $dateMatch
+            'matchday' => $dateMatch
         ])->header('Access-Control-Allow-Origin', '*');
     }
 }

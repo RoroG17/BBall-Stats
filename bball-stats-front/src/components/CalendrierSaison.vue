@@ -1,8 +1,25 @@
 <template>
     <div class="subcontent" style="width: 80%;">
-        <div class="q-pa-md">
+        <div class="q-pa-md row items-center justify-between" style="width: 100%;">
+          <!-- Colonne gauche -->
+          <div>
             <q-btn label="Précédent" @click="onPrev" />
+          </div>
+
+          <!-- Colonne centrale (centrée) -->
+          <div class="text-center">
+            <q-btn label="Aujourd'hui" @click="onToday" />
+          </div>
+
+          <!-- Colonne droite --> 
+          <div>
             <q-btn label="Suivant" @click="onNext" />
+          </div>
+        </div>
+
+        <q-separator />
+        <div class="q-pa-md">
+            <p class="text-h6" style="text-align: center;">{{ monthName }} {{ currentDate.getFullYear() }}</p>
         </div>
   
       <div class="row justify-center">
@@ -18,17 +35,17 @@
             :day-min-height="60"
             :day-height="0"
           >
-            <template #day="{ scope: { timestamp } }">
-              <template v-for="event in eventsMap[timestamp.date]" :key="event.id">
+            <template #day="{ scope }">
+              <template v-for="event in eventsForDay(scope.timestamp.date)" :key="event.id">
                 <div
                   :class="badgeClasses(event)"
                   :style="badgeStyles()"
                   class="row justify-start items-center no-wrap my-event"
                 >
-                  <q-icon v-if="event?.icon" :name="event.icon" class="q-mr-xs"></q-icon>
+                  <q-icon :name="getIcon(event.type)" class="q-mr-xs"></q-icon>
                   <div class="title q-calendar__ellipsis">
-                    {{ event.title + (event.time ? ' - ' + event.time : '') }}
-                    <q-tooltip>{{ event.details }}</q-tooltip>
+                    {{ event.title }}
+                    <q-tooltip v-if="event.description">{{ event.description }}</q-tooltip>
                   </div>
                 </div>
               </template>
@@ -40,161 +57,54 @@
   </template>
   
   <script setup lang="ts">
-  import {
-    QCalendarMonth,
-    addToDate,
-    parseDate,
-    parseTimestamp,
-  } from '@quasar/quasar-ui-qcalendar'
+  import { QCalendarMonth } from '@quasar/quasar-ui-qcalendar'
   import '@quasar/quasar-ui-qcalendar/index.css'
   
-  import { ref, reactive, computed } from 'vue'
+  import { ref, computed } from 'vue'
+  import type { EventType } from './types/EventType'
   
   // The function below is used to set up our demo data
-  const CURRENT_DAY = new Date()
-  function getCurrentDay(day: number) {
-    const newDay = new Date(CURRENT_DAY)
-    newDay.setDate(day)
-    const tm = parseDate(newDay)
-    return tm!.date
-  }
+  const currentDate = ref(new Date())
+
+  const monthNames = [
+    'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'
+  ]
+  const monthName = computed(() => monthNames[currentDate.value.getMonth()])
   
-  interface Event {
-    id: number
-    title: string
-    details: string
-    date: string
-    time?: string
-    duration?: number
-    bgcolor?: string
-    icon?: string
-    days?: number
-  }
-  
+  const props = defineProps<{
+    events: EventType[]
+  }>()
+
   const calendar = ref<QCalendarMonth>(),
-    selectedDate = ref(onToday()),
-    events = reactive<Event[]>([
-      {
-        id: 1,
-        title: '1st of the Month',
-        details: 'Everything is funny as long as it is happening to someone else',
-        date: getCurrentDay(1),
-        bgcolor: 'orange',
-      },
-      {
-        id: 2,
-        title: 'Sisters Birthday',
-        details: 'Buy a nice present',
-        date: getCurrentDay(4),
-        bgcolor: 'green',
-        icon: 'fas fa-birthday-cake',
-      },
-      {
-        id: 3,
-        title: 'Meeting',
-        details: 'Time to pitch my idea to the company',
-        date: getCurrentDay(10),
-        time: '10:00',
-        duration: 120,
-        bgcolor: 'red',
-        icon: 'fas fa-handshake',
-      },
-      {
-        id: 4,
-        title: 'Lunch',
-        details: 'Company is paying!',
-        date: getCurrentDay(10),
-        time: '11:30',
-        duration: 90,
-        bgcolor: 'teal',
-        icon: 'fas fa-hamburger',
-      },
-      {
-        id: 5,
-        title: 'Visit mom',
-        details: 'Always a nice chat with mom',
-        date: getCurrentDay(20),
-        time: '17:00',
-        duration: 90,
-        bgcolor: 'grey',
-        icon: 'fas fa-car',
-      },
-      {
-        id: 6,
-        title: 'Conference',
-        details: 'Teaching Javascript 101',
-        date: getCurrentDay(22),
-        time: '08:00',
-        duration: 540,
-        bgcolor: 'blue',
-        icon: 'fas fa-chalkboard-teacher',
-      },
-      {
-        id: 7,
-        title: 'Girlfriend',
-        details: 'Meet GF for dinner at Swanky Restaurant',
-        date: getCurrentDay(22),
-        time: '19:00',
-        duration: 180,
-        bgcolor: 'teal',
-        icon: 'fas fa-utensils',
-      },
-      {
-        id: 8,
-        title: 'Rowing',
-        details: 'Stay in shape!',
-        date: getCurrentDay(27),
-        bgcolor: 'purple',
-        icon: 'rowing',
-        days: 2,
-      },
-      {
-        id: 9,
-        title: 'Fishing',
-        details: 'Time for some weekend R&R',
-        date: getCurrentDay(27),
-        bgcolor: 'purple',
-        icon: 'fas fa-fish',
-        days: 2,
-      },
-      {
-        id: 10,
-        title: 'Vacation',
-        details: "Trails and hikes, going camping! Don't forget to bring bear spray!",
-        date: getCurrentDay(29),
-        bgcolor: 'purple',
-        icon: 'fas fa-plane',
-        days: 5,
-      },
-    ])
+    selectedDate = ref(onToday())
   
-  const eventsMap = computed<Record<string, Event[]>>(() => {
-    const map: Record<string, Event[]> = {}
-    if (events.length > 0) {
-      events.forEach((event) => {
-        ;(map[event.date] = map[event.date] || []).push(event)
-        if (event.days !== undefined) {
-          let timestamp = parseTimestamp(event.date)
-          let days = event.days
-          // add a new event for each day, skip the first one which is already added
-          while (--days > 0) {
-            timestamp = addToDate(timestamp!, { day: 1 })
-            if (!map[timestamp.date]) {
-              map[timestamp.date] = []
-            }
-            map[timestamp.date]!.push(event)
-          }
-        }
-      })
+  const getIcon = (title: string) => {
+    switch (title) {
+      case 'birthday':
+        return 'cake'
+      case 'match':
+        return 'sports_basketball'
+      default:
+        return 'event'
     }
-    // console.info(map)
-    return map
-  })
-  function badgeClasses(event: Event) {
-    // console.info('event', event)
+  }
+
+  const getBgColor = (type: string) => {
+    switch (type) {
+      case 'birthday':
+        return 'bg-orange'
+      case 'match':
+        return 'bg-blue'
+      default:
+        return 'bg-grey'
+    }
+  }
+
+  function badgeClasses(event: EventType) {
     return {
       'text-white': true,
-      [`bg-${event.bgcolor}`]: true,
+      [getBgColor(event.type)]: true, // Correction ici
       'q-calendar__ellipsis': true,
     }
   }
@@ -213,15 +123,31 @@
       calendar.value.moveToToday()
     }
   }
-  function onPrev() {
-    if (calendar.value) {
-      calendar.value.prev()
+  
+    function onPrev() {
+      if (calendar.value) {
+        calendar.value.prev()
+        currentDate.value.setMonth(currentDate.value.getMonth() - 1)
+        currentDate.value = new Date(currentDate.value)
+      }
     }
-  }
-  function onNext() {
-    if (calendar.value) {
-      calendar.value.next()
+    function onNext() {
+      if (calendar.value) {
+        calendar.value.next()
+        currentDate.value.setMonth(currentDate.value.getMonth() + 1)
+        currentDate.value = new Date(currentDate.value)
+      }
     }
+
+  // Ajoute cette fonction pour filtrer les événements du jour
+  function eventsForDay(dateStr: string) {
+    return props.events.filter(ev => {
+      // Format la date de l'événement en YYYY-MM-DD
+      const evDate = ev.date instanceof Date
+        ? ev.date.toISOString().slice(0, 10)
+        : ev.date;
+      return evDate === dateStr;
+    });
   }
   </script>
   
@@ -285,4 +211,3 @@
     border-radius: 2px;
   }
   </style>
-  

@@ -42,8 +42,19 @@ class Matchs extends Model
      */
     public static function getAllMatchs() {
         return self::join('saisons', 'matchs.Id_Saison', 'saisons.Id_Saison')
-                    ->join('equipes', 'matchs.equipe_domicile', 'equipes.Id_Equipe')
-                    ->join('equipes', 'matchs.equipe_exterieur', 'equipes.Id_Equipe')
+                    ->join('equipes as equipeDom', 'matchs.equipe_domicile', '=', 'equipeDom.Id_Equipe')
+                    ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe')
+                    ->select(
+                        'matchs.Id_Match as idMatch',
+                        'matchs.numero',
+                        'matchs.date_match as dateMatch',
+                        'equipeDom.nom as equipeDom',
+                        'equipeExt.nom as equipeExt',
+                        'matchs.score_domicile as scoreDom',
+                        'matchs.score_exterieur as scoreExt',
+                        'equipeDom.logo as logoDom',
+                        'equipeExt.logo as logoExt'
+                    )
                     ->get();
     }
 
