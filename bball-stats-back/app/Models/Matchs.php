@@ -204,7 +204,7 @@ class Matchs extends Model
         }
 
         if ($data['championnat'] != "") {
-            $query->where('chamionnat', $data['championnat']);
+            $query->where('championnat', $data['championnat']);
         }
 
         if ($data['categorie'] != "") {

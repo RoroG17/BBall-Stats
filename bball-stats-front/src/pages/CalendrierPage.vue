@@ -5,9 +5,9 @@
       <q-separator />
 
       <div class="row q-gutter-md q-mb-xs q-mt-xs q-ml-md">
-        <q-select v-model="selectedSaison.annees" :options="optionAnnee" label="Années" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
-        <q-select v-model="selectedSaison.championnat" :options="optionChamp" label="Championnat" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
-        <q-select v-model="selectedSaison.categorie" :options="optionCat" label="Catégorie" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
+        <q-select v-model="selectedSaison.annees" clearable :options="optionAnnee" label="Années" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
+        <q-select v-model="selectedSaison.championnat" clearable :options="optionChamp" label="Championnat" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
+        <q-select v-model="selectedSaison.categorie" clearable :options="optionCat" label="Catégorie" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
       </div>
 
       <q-separator />
@@ -49,10 +49,20 @@
     const saisons = ref<SaisonType[]>([])
 
     const updateMatches = async () => {
-      
-      const response = await axios.post('http://localhost:8000/recherche/matchs', {
-        filtre: JSON.stringify(selectedSaison.value)
-      });
+
+      const response = await axios.post(
+        'http://localhost:8000/recherche/matchs',
+        { filtre: selectedSaison.value },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+            // Si tu as un token CSRF, tu peux l’ajouter ici, sinon laisse comme ça
+            // 'X-CSRF-TOKEN': csrfToken,
+          },
+        }
+      );
+
 
 
       matches.value = (response.data || []).map((m: MatchType) => ({
