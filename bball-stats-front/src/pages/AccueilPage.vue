@@ -25,8 +25,8 @@
     </q-card>
 
     <q-card class="q-pa-md q-mb-md card-section" flat bordered>
-      <div class="text-h5 text-secondary flex items-center q-mb-sm">
-        <q-icon name="event" class="q-mr-sm" />
+      <div class="text-h5 text-primary flex items-center q-mb-sm">
+        <q-icon name="sports_basketball" class="q-mr-sm" />
         Prochain Match
       </div>
       <div class="flex justify-center items-center">
@@ -43,7 +43,7 @@
           :scoreExt="nextGame.scoreExt"
         />
         <div v-else>
-          <p class="text-subtitle2">Aucun match prévu pour le moment.</p>
+          <p class="text-subtitle2">Aucun match n'est encore prévu.</p>
         </div>
       </div>
     </q-card>
