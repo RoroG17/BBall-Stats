@@ -19,3 +19,5 @@ Route::resource('api/matchs', MatchResource::class);
 Route::resource('api/stats', JouerResource::class);
 
 Route::get('/accueil', [AppController::class, 'accueil']);
+
+Route::post('recherche/matchs', [AppController::class, 'rechercheMatch']);
