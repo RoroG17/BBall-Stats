@@ -121,6 +121,7 @@
   function onToday() {
     if (calendar.value) {
       calendar.value.moveToToday()
+      currentDate.value = new Date()
     }
   }
   
