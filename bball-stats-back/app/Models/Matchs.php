@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $Id_Match
  * @property string $date_match
  * @property int $numero
- * @property bool $domicile
  * @property int $score_f
  * @property int $score_a
  * @property int $Id_Equipe
@@ -34,11 +34,7 @@ class Matchs extends Model
     public $incrementing = true;
     public $timestamps = false;
 
-    protected $fillable = ['date_match', 'numero', 'domicile', 'score_f', 'score_a', 'Id_Equipe', 'Id_Saison'];
-
-    protected $casts = [
-        'domicile' => 'boolean',
-    ];
+    protected $fillable = ['date_match', 'numero', 'equipe_domicile', 'equipe_exterieur', 'score_domicile', 'score_exterieur', 'Id_Saison'];
 
     /**
      * Récupère tous les matchs avec jointure sur saisons et équipes.
@@ -46,7 +42,19 @@ class Matchs extends Model
      */
     public static function getAllMatchs() {
         return self::join('saisons', 'matchs.Id_Saison', 'saisons.Id_Saison')
-                    ->join('equipes', 'matchs.Id_Equipe', 'equipes.Id_Equipe')
+                    ->join('equipes as equipeDom', 'matchs.equipe_domicile', '=', 'equipeDom.Id_Equipe')
+                    ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe')
+                    ->select(
+                        'matchs.Id_Match as idMatch',
+                        'matchs.numero',
+                        'matchs.date_match as dateMatch',
+                        'equipeDom.nom as equipeDom',
+                        'equipeExt.nom as equipeExt',
+                        'matchs.score_domicile as scoreDom',
+                        'matchs.score_exterieur as scoreExt',
+                        'equipeDom.logo as logoDom',
+                        'equipeExt.logo as logoExt'
+                    )
                     ->get();
     }
 
@@ -57,7 +65,8 @@ class Matchs extends Model
      */
     public static function getMatch($id) {
         return self::join('saisons', 'matchs.Id_Saison', 'saisons.Id_Saison')
-                    ->join('equipes', 'matchs.Id_Equipe', 'equipes.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_domicile', 'equipes.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_exterieur', 'equipes.Id_Equipe')
                     ->find($id);
     } 
 
@@ -73,10 +82,50 @@ class Matchs extends Model
     public static function getStatsMatch($id) {
         return self::join('jouer', 'matchs.Id_Match', 'jouer.Id_Match')
                     ->join('joueurs', 'jouer.licence', 'joueurs.licence')
-                    ->join('equipes', 'matchs.Id_Equipe', 'equipe.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_domicile', 'equipes.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_exterieur', 'equipes.Id_Equipe')
                     ->where('matchs.Id_Match', $id)
                     ->select('joueurs.*', 'jouer.*', 'matchs.*', 'equipes.nom as equipe')
                     ->get();
+    }
+
+    public static function getNextMatch() {
+        return self::join('equipes as equipeDom', 'matchs.equipe_domicile', '=', 'equipeDom.Id_Equipe')
+                    ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe')
+                    ->select(
+                        'matchs.Id_Match as idMatch',
+                        'matchs.numero',
+                        'matchs.date_match as dateMatch',
+                        'equipeDom.nom as equipeDom',
+                        'equipeExt.nom as equipeExt',
+                        'matchs.score_domicile as scoreDom',
+                        'matchs.score_exterieur as scoreExt',
+                        'equipeDom.logo as logoDom',
+                        'equipeExt.logo as logoExt'
+                    )
+                    ->where('matchs.date_match', '>=', Carbon::now())
+                    ->orderBy('matchs.date_match')
+                    ->first();
+    }
+
+
+    public static function getPreviousMatch() {
+        return self::join('equipes as equipeDom', 'matchs.equipe_domicile', '=', 'equipeDom.Id_Equipe')
+                    ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe')
+                    ->select(
+                        'matchs.Id_Match as idMatch',
+                        'matchs.numero',
+                        'matchs.date_match as dateMatch',
+                        'equipeDom.nom as equipeDom',
+                        'equipeExt.nom as equipeExt',
+                        'matchs.score_domicile as scoreDom',
+                        'matchs.score_exterieur as scoreExt',
+                        'equipeDom.logo as logoDom',
+                        'equipeExt.logo as logoExt'
+                        )
+                    ->where('date_match', '<', Carbon::now())
+                    ->orderByDESC('date_match')
+                    ->first();
     }
 
     /**
@@ -86,7 +135,8 @@ class Matchs extends Model
      */
     public static function getMatchBySaison($id_saison) {
         return self::join('saisons', 'matchs.Id_Saison', 'saisons.Id_Saison')
-                    ->join('equipes', 'matchs.Id_Equipe', 'equipes.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_domicile', 'equipes.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_exterieur', 'equipes.Id_Equipe')
                     ->where('matchs.Id_Saison', $id_saison);
     }
 
@@ -97,7 +147,8 @@ class Matchs extends Model
      */
     public static function getMatchByEquipe($id_equipe) {
         return self::join('saisons', 'matchs.Id_Saison', 'saisons.Id_Saison')
-                    ->join('equipes', 'matchs.Id_Equipe', 'equipes.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_domicile', 'equipes.Id_Equipe')
+                    ->join('equipes', 'matchs.equipe_exterieur', 'equipes.Id_Equipe')
                     ->where('matchs.Id_Equipe', $id_equipe);
     }
 
@@ -141,12 +192,5 @@ class Matchs extends Model
      */
     public function deleteMatch() {
         return $this->delete();
-    }
-
-    public function equipe() {
-        return $this->belongsTo(Equipe::class, 'Id_Equipe');
-    }
-    public function saison() {
-        return $this->belongsTo(Saison::class, 'Id_Saison');
     }
 }
