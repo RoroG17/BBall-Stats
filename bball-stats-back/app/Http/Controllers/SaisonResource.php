@@ -21,12 +21,12 @@ class SaisonResource extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = validator($request->input('data'), [
             'annee_debut' => 'required|integer',
             'annee_fin' => 'required|integer',
             'championnat' => 'required|string',
             'categorie' => 'required|string',
-        ]);
+        ])->validate();
         $saison = Saison::createSaison($validated);
         return response()->json($saison, 201);
     }

@@ -23,21 +23,14 @@ class MatchResource extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = validator($request->input('data'), [
             'date_match' => 'required|date',
             'numero' => 'required|integer',
-            'domicile' => 'required|boolean',
-            'score_f' => 'required|integer',
-            'score_a' => 'required|integer',
-            'Id_Equipe' => 'required|integer',
-            'Id_Saison' => 'required|integer',
-        ]);
-        if (!Equipe::existeEquipe($validated['Id_Equipe'])) {
-            return response()->json(['message' => "L'équipe n'existe pas"], 404);
-        }
-        if (!Saison::existeSaison($validated['Id_Saison'])) {
-            return response()->json(['message' => "La saison n'existe pas"], 404);
-        }
+            'equipe_domicile' => 'required|integer',
+            'equipe_exterieur' => 'required|integer',
+            'Id_Saison' => 'required|integer', 
+        ])->validate();
+        
         $match = Matchs::createMatch($validated);
         return response()->json($match, 201);
     }

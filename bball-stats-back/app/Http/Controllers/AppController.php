@@ -21,4 +21,11 @@ class AppController extends Controller
             'matchday' => $dateMatch
         ])->header('Access-Control-Allow-Origin', '*');
     }
+
+    public function rechercheMatch(Request $request) {
+        \Log::info($request);
+        $matchs = Matchs::rechercheMatch($request->filtre);
+
+        return response()->json($matchs)->header('Access-Control-Allow-Origin', '*');
+    }
 }

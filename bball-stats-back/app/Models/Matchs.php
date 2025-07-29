@@ -161,10 +161,10 @@ class Matchs extends Model
         return self::create([
             'date_match' => $data['date_match'] ?? $data->date_match,
             'numero' => $data['numero'] ?? $data->numero,
-            'domicile' => $data['domicile'] ?? $data->domicile,
-            'score_f' => $data['score_f'] ?? $data->score_f,
-            'score_a' => $data['score_a'] ?? $data->score_a,
-            'Id_Equipe' => $data['Id_Equipe'] ?? $data->Id_Equipe,
+            'equipe_domicile' => $data['equipe_domicile'] ?? $data->equipe_domicile,
+            'equipe_exterieur' => $data['equipe_exterieur'] ?? $data->equipe_exterieur,
+            'score_domicile' => 0,
+            'score_exterieur' => 0,
             'Id_Saison' => $data['Id_Saison'] ?? $data->Id_Saison,
         ]);
     }
@@ -192,5 +192,37 @@ class Matchs extends Model
      */
     public function deleteMatch() {
         return $this->delete();
+    }
+
+    public static function rechercheMatch($data) {
+        $query = self::join('saisons', 'saisons.Id_Saison', 'matchs.Id_Saison')
+                        ->join('equipes as equipeDom', 'matchs.equipe_domicile', '=', 'equipeDom.Id_Equipe')
+                        ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe');
+
+        if ($data['annees'] != "") {
+
+        }
+
+        if ($data['championnat'] != "") {
+            $query->where('championnat', $data['championnat']);
+        }
+
+        if ($data['categorie'] != "") {
+            $query->where('categorie', $data['categorie']);
+        }
+
+        return $query->select(
+                        'matchs.Id_Match as idMatch',
+                        'matchs.numero',
+                        'matchs.date_match as dateMatch',
+                        'equipeDom.nom as equipeDom',
+                        'equipeExt.nom as equipeExt',
+                        'matchs.score_domicile as scoreDom',
+                        'matchs.score_exterieur as scoreExt',
+                        'equipeDom.logo as logoDom',
+                        'equipeExt.logo as logoExt'
+                    )
+                    ->orderBy('date_match')
+                    ->get();
     }
 }
