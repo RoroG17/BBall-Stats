@@ -1,5 +1,5 @@
 export type SaisonType = {
-    id_Saison : number,
+    Id_Saison : number,
     annee_debut : number,
     annee_fin : number,
     championnat : string,

@@ -161,10 +161,10 @@ class Matchs extends Model
         return self::create([
             'date_match' => $data['date_match'] ?? $data->date_match,
             'numero' => $data['numero'] ?? $data->numero,
-            'domicile' => $data['domicile'] ?? $data->domicile,
-            'score_f' => $data['score_f'] ?? $data->score_f,
-            'score_a' => $data['score_a'] ?? $data->score_a,
-            'Id_Equipe' => $data['Id_Equipe'] ?? $data->Id_Equipe,
+            'equipe_domicile' => $data['equipe_domicile'] ?? $data->equipe_domicile,
+            'equipe_exterieur' => $data['equipe_exterieur'] ?? $data->equipe_exterieur,
+            'score_domicile' => 0,
+            'score_exterieur' => 0,
             'Id_Saison' => $data['Id_Saison'] ?? $data->Id_Saison,
         ]);
     }

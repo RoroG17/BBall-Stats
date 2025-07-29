@@ -4,10 +4,52 @@
 
       <q-separator />
 
-      <div class="row q-gutter-md q-mb-xs q-mt-xs q-ml-md">
-        <q-select v-model="selectedSaison.annees" clearable :options="optionAnnee" label="Années" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
-        <q-select v-model="selectedSaison.championnat" clearable :options="optionChamp" label="Championnat" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
-        <q-select v-model="selectedSaison.categorie" clearable :options="optionCat" label="Catégorie" class="q-mb-md" style="width: 200px;" @update:model-value="updateMatches" />
+      <div class="row q-gutter-md q-mb-xs q-mt-xs q-ml-md" style="display: flex; align-items: center;">
+        <div style="display: flex; gap: 16px;">
+          <q-select
+            v-model="selectedSaison.annees"
+            clearable
+            :options="optionAnnee"
+            label="Années"
+            class="q-mb-md"
+            style="width: 200px;"
+            @update:model-value="updateMatches"
+          />
+          <q-select
+            v-model="selectedSaison.championnat"
+            clearable
+            :options="optionChamp"
+            label="Championnat"
+            class="q-mb-md"
+            style="width: 200px;"
+            @update:model-value="updateMatches"
+          />
+          <q-select
+            v-model="selectedSaison.categorie"
+            clearable
+            :options="optionCat"
+            label="Catégorie"
+            class="q-mb-md"
+            style="width: 200px;"
+            @update:model-value="updateMatches"
+          />
+        </div>
+
+        <!-- Spacer flexible qui pousse le bouton à droite -->
+        <div style="flex-grow: 1;"></div>
+
+        <q-btn
+          icon="add"
+          color="primary"
+          round
+          style="width: 4em; height: 4em;"
+          class="q-mr-xl"
+          to="/match"
+        >
+          <q-tooltip anchor="bottom middle" self="bottom middle">
+            Créer un match
+          </q-tooltip>
+        </q-btn>
       </div>
 
       <q-separator />
@@ -99,7 +141,7 @@
     }));
 
     saisons.value = (responseSaison.data || []).map((s : SaisonType) => ({
-      id_Saison : s.id_Saison,
+      id_Saison : s.Id_Saison,
       annee_debut : s.annee_debut,
       annee_fin : s.annee_fin,
       championnat : s.championnat,
@@ -133,6 +175,6 @@ void fetchGames();
   </script>
   
   <style scoped>
-  
+
   </style>
   
