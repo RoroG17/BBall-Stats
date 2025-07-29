@@ -28,8 +28,9 @@
       <q-list>
         <q-item-label
           header
-          class="title"
+          class="text-h5 text-secondary q-mb-md flex items-center"
         >
+          <q-icon name="dashboard" class="q-mr-sm" />
           Tableau de Bord
         </q-item-label>
 

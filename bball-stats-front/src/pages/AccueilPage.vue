@@ -97,7 +97,7 @@ const fetchGames = async () => {
 
     const birthdayEvents = (response.data.birthday || []).map((ev: BirthdayEvent) => ({
       id: ev.licence,
-      title: 'Anniversaire ' + ev.nom + ' ' + ev.prenom,
+      title: ev.nom + ' ' + ev.prenom,
       date: new Date(ev.date_anniversaire),
       type: 'birthday'
     }));

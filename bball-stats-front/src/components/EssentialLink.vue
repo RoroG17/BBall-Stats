@@ -1,5 +1,5 @@
 <template>
-  <q-item clickable tag="router-link" :to="link">
+  <q-item clickable tag="router-link" :to="link" active-class="active-link">
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
@@ -25,3 +25,12 @@ withDefaults(defineProps<EssentialLinkProps>(), {
   icon: '',
 });
 </script>
+
+<style>
+.active-link {
+  background-color: #ffffff !important;
+  color: #FF0000 !important;
+  font-weight: bold;
+  border-left: 4px solid #fff;
+}
+</style>
