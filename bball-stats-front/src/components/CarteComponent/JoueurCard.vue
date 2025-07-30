@@ -1,5 +1,5 @@
 <template>
-    <q-card class="q-ma-md q-pa-md shadow-2 rounded-borders" style="width: 250px;">
+    <q-card class="q-ma-md q-pa-md shadow-2 rounded-borders cursor-pointer" style="width: 250px;" @click="handleClick()">
       <q-img :src="props.joueur.photo" alt="Photo du joueur" class="rounded-borders" />
   
       <q-card-section>
@@ -30,11 +30,18 @@
   function formatDate(date: Date): string {
     return new Date(date).toLocaleDateString('fr-FR')
   }
+
+  function handleClick() {
+    alert(props.joueur.licence)
+  //router.push({ name: 'joueur-details', params: { licence: props.joueur.licence } })
+}
   </script>
   
   <style scoped>
   .rounded-borders {
     border-radius: 12px;
   }
+
+
   </style>
   
