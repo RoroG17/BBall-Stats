@@ -31,7 +31,7 @@ class Joueur extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $fillable = ['licence', 'nom', 'prenom', 'civilite', 'date_naissance', 'photo'];
+    protected $fillable = ['licence', 'nom', 'prenom', 'civilite', 'date_naissance', 'photo', 'Id_Equipe'];
 
     /**
      * Récupère tous les joueurs.
@@ -39,7 +39,7 @@ class Joueur extends Model
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public static function getAllJoueurs() {
-        return self::all();
+        return self::join('equipes', 'joueurs.Id_Equipe', '=', 'equipes.Id_Equipe')->select('joueurs.*', 'equipes.nom as equipe', 'equipes.logo as logo')->get();
     }
 
     /**
@@ -135,4 +135,35 @@ class Joueur extends Model
 
         return $anniversaire;
     }
+
+    public static function rechercheJoueur($data) {
+    $query = self::join('equipes', 'joueurs.Id_Equipe', '=', 'equipes.Id_Equipe');
+
+    if (!empty($data['licence'])) {
+        $query->where('licence', 'like', '%' . $data['licence'] . '%');
+    }
+
+    if (!empty($data['nom'])) {
+        $query->where('joueurs.nom', 'like', '%' . $data['nom'] . '%');
+    }
+
+    if (!empty($data['prenom'])) {
+        $query->where('prenom', 'like', '%' . $data['prenom'] . '%');
+    }
+
+    if (!empty($data['generation'])) {
+        $query->where('date_naissance', 'like', $data['generation'] . '-%');
+    }
+
+    if (!empty($data['sexe'])) {
+        $query->where('civilite', 'like', '%' . $data['sexe'] . '%');
+    }
+
+    if (!empty($data['equipe'])) {
+        $query->where('equipes.nom', 'like', '%' . $data['equipe'] . '%');
+    }
+
+    return $query->select('joueurs.*', 'equipes.nom as equipe', 'equipes.logo as logo')->get();
+}
+
 }

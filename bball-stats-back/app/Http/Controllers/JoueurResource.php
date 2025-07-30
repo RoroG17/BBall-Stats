@@ -13,7 +13,7 @@ class JoueurResource extends Controller
     public function index()
     {
         $joueurs = Joueur::getAllJoueurs();
-        return response()->json($joueurs);
+        return response()->json(['joueurs' => $joueurs])->header('Access-Control-Allow-Origin', '*');
     }
 
     /**

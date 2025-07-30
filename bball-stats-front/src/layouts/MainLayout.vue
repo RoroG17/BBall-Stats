@@ -66,7 +66,7 @@ const linksList: EssentialLinkProps[] = [
   {
     title: 'Espace Joueur',
     icon: 'person',
-    link: '/joueur'
+    link: '/effectif'
   },
   {
     title: 'Espace Equipe',
