@@ -23,9 +23,14 @@ class AppController extends Controller
     }
 
     public function rechercheMatch(Request $request) {
-        \Log::info($request);
         $matchs = Matchs::rechercheMatch($request->filtre);
 
         return response()->json($matchs)->header('Access-Control-Allow-Origin', '*');
+    }
+
+    public function rechercheJoueur(Request $request) {
+        $joueurs = Joueur::rechercheJoueur($request->filtre);
+
+        return response()->json($joueurs)->header('Access-Control-Allow-Origin', '*');
     }
 }

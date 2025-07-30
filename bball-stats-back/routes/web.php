@@ -21,3 +21,4 @@ Route::resource('api/stats', JouerResource::class);
 Route::get('/accueil', [AppController::class, 'accueil']);
 
 Route::post('recherche/matchs', [AppController::class, 'rechercheMatch']);
+Route::post('recherche/joueurs', [AppController::class, 'rechercheJoueur']);

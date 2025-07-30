@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('civilite');
             $table->date('date_naissance');
             $table->string('photo')->nullable();
+            $table->unsignedInteger('Id_Equipe');
+            $table->foreign('Id_Equipe')->references('Id_Equipe')->on('equipes')->onDelete('cascade');
         });
     }
 

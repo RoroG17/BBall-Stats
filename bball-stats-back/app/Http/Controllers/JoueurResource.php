@@ -13,7 +13,7 @@ class JoueurResource extends Controller
     public function index()
     {
         $joueurs = Joueur::getAllJoueurs();
-        return response()->json($joueurs);
+        return response()->json(['joueurs' => $joueurs])->header('Access-Control-Allow-Origin', '*');
     }
 
     /**
@@ -27,6 +27,7 @@ class JoueurResource extends Controller
             'prenom' => 'required|string',
             'civilite' => 'required|string',
             'date_naissance' => 'required|date',
+            'equipe' => 'required|integer',
             'photo' => 'nullable|string',
         ]);
         $joueur = Joueur::createJoueur($validated);
