@@ -85,6 +85,7 @@ class Joueur extends Model
             'civilite' => $data['civilite'] ?? $data->civilite,
             'date_naissance' => $data['date_naissance'] ?? $data->date_naissance,
             'photo' => $data['photo'] ?? $data->photo ?? null,
+            'Id_Equipe' => $data['equipe'] 
         ]);
     }
 

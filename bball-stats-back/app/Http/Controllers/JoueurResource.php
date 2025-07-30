@@ -27,6 +27,7 @@ class JoueurResource extends Controller
             'prenom' => 'required|string',
             'civilite' => 'required|string',
             'date_naissance' => 'required|date',
+            'equipe' => 'required|integer',
             'photo' => 'nullable|string',
         ]);
         $joueur = Joueur::createJoueur($validated);

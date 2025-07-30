@@ -68,10 +68,10 @@
                 round
                 style="width: 4em; height: 4em;"
                 class="q-mr-xl"
-                to="/match"
+                to="/joueur"
             >
                 <q-tooltip anchor="bottom middle" self="bottom middle">
-                    Créer un match
+                    Créer un joueur
                 </q-tooltip>
             </q-btn>
         </div>
