@@ -74,7 +74,7 @@
   </template>
   
   <script setup lang="ts">
-  import MatchCard from '../components/MatchCard.vue';
+  import MatchCard from '../components/CarteComponent/MatchCard.vue';
   import{ ref } from 'vue'
   import type { MatchType } from '../components/types/MatchType';
   import type { SaisonType } from 'src/components/types/SaisonType';

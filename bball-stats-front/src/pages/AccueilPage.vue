@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import Match from '../components/MatchCard.vue';
+import Match from '../components/CarteComponent/MatchCard.vue';
 import CalendrierSaison from '../components/CalendrierSaison.vue';
 import type { MatchType } from '../components/types/MatchType';
 import type { EventType } from '../components/types/EventType';

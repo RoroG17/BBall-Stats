@@ -27,7 +27,7 @@
   </template>
   
   <script setup lang="ts">
-  import type { MatchType } from './types/MatchType';
+  import type { MatchType } from '../types/MatchType';
   import { useRouter } from 'vue-router';
 
   const props = defineProps<MatchType>();

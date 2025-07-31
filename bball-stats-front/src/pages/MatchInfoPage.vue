@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import axios from 'axios';
-import MatchCard from 'src/components/MatchCard.vue';
+import MatchCard from 'src/components/CarteComponent/MatchCard.vue';
 import StatsJoueursTable from 'src/components/TableComponent/StatsJoueursTable.vue';
 import type { MatchType } from 'src/components/types/MatchType';
 import type { StatJoueur } from 'src/components/types/StatJoueurType';
