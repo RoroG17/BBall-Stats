@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jouer;
 use Illuminate\Http\Request;
 use App\Models\Joueur;
 
@@ -40,10 +41,11 @@ class JoueurResource extends Controller
     public function show(string $licence)
     {
         $joueur = Joueur::getJoueur($licence);
+        $stats = Jouer::getStatsJoueur($licence);
         if (!$joueur) {
             return response()->json(['message' => 'Joueur non trouvé'], 404);
         }
-        return response()->json($joueur);
+        return response()->json(["joueur" => $joueur, "stats" => $stats])->header('Access-Control-Allow-Origin', '*');
     }
 
     /**

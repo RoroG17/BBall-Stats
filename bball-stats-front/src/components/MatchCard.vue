@@ -28,9 +28,10 @@
   
   <script setup lang="ts">
   import type { MatchType } from './types/MatchType';
+  import { useRouter } from 'vue-router';
 
-    const props = defineProps<MatchType>();
-  
+  const props = defineProps<MatchType>();
+  const router = useRouter();
   // Formatage de la date (tu peux adapter selon ton format préféré)
   const formattedDate = props.dateMatch.toLocaleDateString("fr-FR", {
     year: 'numeric',
@@ -38,9 +39,12 @@
     day: 'numeric'
   });
 
-  const goToMatchStats = (id: number) => {
-    //router.push(`/espace-matchs/${id}`);
-    alert(id);
+  const goToMatchStats = async (id: number) => {
+    try{
+      await router.push(`/match/${id}`);
+    } catch (error) {
+      console.log(error)
+    }
   };
   </script>
   

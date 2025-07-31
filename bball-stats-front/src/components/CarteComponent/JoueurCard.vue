@@ -21,8 +21,10 @@
   </template>
   
   <script setup lang="ts">
-  import type { JoueurType } from '../types/JoueurType'; // modifie ce chemin selon ton projet
+  import {  useRouter } from 'vue-router';
+import type { JoueurType } from '../types/JoueurType'; // modifie ce chemin selon ton projet
   
+  const router = useRouter();
   const props = defineProps<{
     joueur: JoueurType
   }>()
@@ -31,9 +33,12 @@
     return new Date(date).toLocaleDateString('fr-FR')
   }
 
-  function handleClick() {
-    alert(props.joueur.licence)
-  //router.push({ name: 'joueur-details', params: { licence: props.joueur.licence } })
+  async function handleClick() {
+    try {
+      await router.push(`/joueur/${props.joueur.licence}`)
+    } catch (error) {
+      console.log(error)
+    }
 }
   </script>
   

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Equipe;
+use App\Models\Jouer;
 use App\Models\User;
 use App\Models\Joueur;
 use App\Models\Matchs;
@@ -21,5 +22,6 @@ class DatabaseSeeder extends Seeder
         Equipe::factory(20)->create();
         Saison::factory(5)->create();
         Matchs::factory(20)->create();
+        Jouer::factory(50)->create();
     }
 }

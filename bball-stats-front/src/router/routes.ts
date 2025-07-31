@@ -17,6 +17,12 @@ const routes: RouteRecordRaw[] = [
     children: [{ path: '', component: () => import('pages/MatchCreation.vue') }],
   },
   {
+    path: '/match/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/MatchInfoPage.vue'), props:true }],
+
+  },
+  {
     path: '/effectif',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/EffectifPage.vue') }],
@@ -26,6 +32,12 @@ const routes: RouteRecordRaw[] = [
     path: '/joueur',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/JoueurCreation.vue') }],
+  },
+
+  {
+    path: '/joueur/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/JoueurInfoPage.vue'), props:true }],
   },
 
   // Always leave this as last one,

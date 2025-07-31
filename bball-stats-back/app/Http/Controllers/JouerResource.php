@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jouer;
 use Illuminate\Http\Request;
 
 class JouerResource extends Controller
@@ -11,7 +12,8 @@ class JouerResource extends Controller
      */
     public function index()
     {
-        //
+        $stats = Jouer::getAllStats();
+        return response()->json($stats)->header('Access-Control-Allow-Origin', '*');
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Matchs;
 use App\Models\Equipe;
+use App\Models\Jouer;
 use App\Models\Saison;
 
 class MatchResource extends Controller
@@ -41,10 +42,11 @@ class MatchResource extends Controller
     public function show(string $id)
     {
         $match = Matchs::getMatch($id);
+        $stats = Jouer::getStatsMatch($id);
         if (!$match) {
             return response()->json(['message' => 'Match non trouvé'], 404);
         }
-        return response()->json($match);
+        return response()->json(["match" => $match, "stats" => $stats])->header('Access-Control-Allow-Origin', '*');
     }
 
     /**
