@@ -11,7 +11,7 @@ class CreateJouerTable extends Migration
         Schema::create('jouer', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('Id_Match');
-            $table->string('licence');
+            $table->string('licence',8);
             $table->integer('minutes')->nullable();
 
             foreach (range(1, 4) as $q) {
