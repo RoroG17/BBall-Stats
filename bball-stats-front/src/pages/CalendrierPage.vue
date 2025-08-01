@@ -165,7 +165,6 @@
     optionAnnee.value.sort((a, b) => a.localeCompare(b));
     optionChamp.value.sort((a, b) => a.localeCompare(b));
     optionCat.value.sort((a, b) => a.localeCompare(b));
-    console.log(saisons.value)
     } catch (error) {
         console.error('Error fetching games:', error);
     }

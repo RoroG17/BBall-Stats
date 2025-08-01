@@ -13,7 +13,7 @@
   
       <q-card-section class="row items-center q-gutter-sm">
         <q-avatar size="32px">
-          <img :src="props.joueur.logo" alt="Logo équipe" />
+          <img :src="`http://localhost:8000/storage/logo/${props.joueur.logo}`" alt="Logo équipe" />
         </q-avatar>
         <div>{{ props.joueur.equipe }}</div>
       </q-card-section>

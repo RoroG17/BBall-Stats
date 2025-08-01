@@ -7,7 +7,7 @@
       <q-card-section class="row items-center justify-around">
       <div class="column items-center">
         <q-avatar size="80px">
-          <img :src="`/storage/${props.logoDom}`" :alt="`Logo ${props.equipeDom}`" />
+          <img :src="`http://localhost:8000/storage/logo/${props.logoDom}`" :alt="`Logo ${props.equipeDom}`" />
         </q-avatar>
         <div class="text-h6 text-center">{{ props.equipeDom }}</div>
       </div>
@@ -18,7 +18,7 @@
 
       <div class="column items-center">
         <q-avatar size="80px">
-          <img :src="`/storage/${props.logoExt}`" :alt="`Logo ${props.equipeExt}`" />
+          <img :src="`http://localhost:8000/storage/logo/${props.logoExt}`" :alt="`Logo ${props.equipeExt}`" />
         </q-avatar>
         <div class="text-h6 text-center">{{ props.equipeExt }}</div>
       </div>
