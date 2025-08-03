@@ -99,7 +99,7 @@
   }
 
   const columns: QTableColumn[] = [
-    { name: 'match', label: 'Match', field: 'match', align: 'left' },
+    { name: 'match', label: 'Match', field: 'match_libelle', align: 'left' },
     { name: 'minutes', label: 'Minutes', field: 'minutes', align: 'center', sortable: true },
     { name: 'points', label: 'Pts', field: 'points', align: 'center', sortable: true },
     { name: 'passes_decisives', label: 'Passes D.', field: 'passes_decisives', align: 'center', sortable: true },
@@ -128,7 +128,7 @@
       const tirs_total = tirs_reussis + sumFields('tirs_2pts_manques') + sumFields('tirs_3pts_manques');
   
       return {
-        match: match.match,
+        match_libelle: match.match_libelle,
         minutes: match.minutes,
   
         points: sumFields('tirs_2pts_reussis') * 2 + sumFields('tirs_3pts_reussis') * 3 + sumFields('lancers_francs_reussis'),

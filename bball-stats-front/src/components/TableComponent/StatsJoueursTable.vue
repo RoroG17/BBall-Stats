@@ -8,6 +8,11 @@
         style="max-width: 200px;"
         @update:model-value="ChangePeriode"
     />
+
+    <q-btn icon="add"  class="q-mt-md q-mb-md q-ml-xl bg-primary text-white" round @click="addStats">
+      <q-tooltip>Ajouter les stats du match</q-tooltip>
+    </q-btn>
+
     <div class="flex flex-column items-center justify-center" >
         <q-table
             :rows="rows"
@@ -70,8 +75,9 @@
   import { computed, ref } from 'vue';
   import type { StatJoueur } from 'src/components/types/StatJoueurType';
   import type { QTableColumn } from 'quasar';
+import { useRouter } from 'vue-router';
   
-  const props = defineProps<{ stats: StatJoueur[] }>();
+  const props = defineProps<{ stats: StatJoueur[], idMatch: number | undefined }>();
   
   const periode = ref('Match Complet')
   const statPeriode = ref([1,2,3,4])
@@ -209,6 +215,15 @@
   
     return total;
   });
+
+  const router = useRouter()
+  const addStats = async () => {
+    try {
+      await router.push(`/stats/${props.idMatch}`)
+    } catch (error) {
+      console.error('Erreur lors de la navigation vers la page d\'ajout de stats :', error)
+    }
+  }
   </script>
   
   <style scoped>

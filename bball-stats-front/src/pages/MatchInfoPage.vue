@@ -15,7 +15,7 @@
         />
     </div>
         <q-separator class="q-mt-md q-mb-md" />
-        <StatsJoueursTable :stats="stats" class="q-mt-md"/>
+        <StatsJoueursTable :stats="stats" :idMatch="match?.idMatch" class="q-mt-md"/>
 </template>
 
 <script setup lang="ts">

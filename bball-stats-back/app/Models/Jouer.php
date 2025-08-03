@@ -104,18 +104,17 @@ class Jouer extends Model
     }
 
     public static function getStatsJoueur($id) {
-        return self::join('joueurs', 'jouer.licence', '=', 'joueurs.licence')
-            ->join('matchs', 'jouer.Id_Match', '=', 'matchs.Id_Match')
+        return self::join('matchs', 'jouer.Id_Match', '=', 'matchs.Id_Match')
             ->join('equipes as equipeDom', 'matchs.equipe_domicile', '=', 'equipeDom.Id_Equipe')
             ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe')
             ->select(
                 'jouer.*',
-                //DB::raw("CONCAT(equipeDom.nom, ' - ', equipeExt.nom) as match")
-                DB::raw("equipeDom.nom || ' - ' || equipeExt.nom as match")
+                DB::raw("CONCAT(equipeDom.nom, ' - ', equipeExt.nom) as match_libelle")
             )
-            ->where('joueurs.licence', $id)
+            ->where('jouer.licence', $id)
             ->get();
     }
+
 
     public static function getStats($id) {
         return self::find($id);

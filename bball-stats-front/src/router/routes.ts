@@ -23,6 +23,12 @@ const routes: RouteRecordRaw[] = [
 
   },
   {
+    path: '/stats/:id',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/AddStatsPage.vue'), props:true }],
+
+  },
+  {
     path: '/effectif',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/EffectifPage.vue') }],

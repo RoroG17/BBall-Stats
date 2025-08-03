@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Joueur;
 use App\Models\Matchs;
+use App\Models\Jouer;
 use Illuminate\Http\Request;
 
 class AppController extends Controller
@@ -32,5 +33,12 @@ class AppController extends Controller
         $joueurs = Joueur::rechercheJoueur($request->filtre);
 
         return response()->json($joueurs)->header('Access-Control-Allow-Origin', '*');
+    }
+
+    public function addStats(Request $request) {
+        \Log::info($request->all());
+        $stats = Jouer::createStats($request->all());
+
+        return response()->json($stats)->header('Access-Control-Allow-Origin', '*');
     }
 }

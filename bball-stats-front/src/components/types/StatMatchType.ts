@@ -1,5 +1,5 @@
 export type StatMatch = {
-    match:string
+    match_libelle:string
     
     minutes: number;
   
