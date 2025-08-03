@@ -14,8 +14,8 @@
             class="q-mt-md q-ml-xl"
         />
     </div>
-        <q-separator class="q-mt-md q-mb-md" />
-        <StatsJoueursTable :stats="stats" :idMatch="match?.idMatch" class="q-mt-md"/>
+    <q-separator class="q-mt-md q-mb-md" />
+    <StatsJoueursTable :stats="stats" :idMatch="match?.idMatch" class="q-mt-md"/>
 </template>
 
 <script setup lang="ts">
@@ -25,6 +25,7 @@ import StatsJoueursTable from 'src/components/TableComponent/StatsJoueursTable.v
 import type { MatchType } from 'src/components/types/MatchType';
 import type { StatJoueur } from 'src/components/types/StatJoueurType';
 import { defineProps, ref } from 'vue';
+
 
 const props = defineProps<{ id: string }>();
 

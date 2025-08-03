@@ -1,17 +1,24 @@
 <template>
-    <q-select
+    <div class="row items-center q-mt-md q-mb-md q-ml-xl">
+      <q-select
         v-model="periode"
         :options="optionPeriode"
         label="Période"
         outlined
-        class="q-mt-md q-mb-md q-ml-xl" 
         style="max-width: 200px;"
         @update:model-value="ChangePeriode"
-    />
+      />
 
-    <q-btn icon="add"  class="q-mt-md q-mb-md q-ml-xl bg-primary text-white" round @click="addStats">
-      <q-tooltip>Ajouter les stats du match</q-tooltip>
-    </q-btn>
+      <q-btn
+        icon="add"
+        class="q-ml-md bg-primary text-white"
+        round
+        @click="addStats"
+      >
+        <q-tooltip>Ajouter les stats du match</q-tooltip>
+      </q-btn>
+    </div>
+
 
     <div class="flex flex-column items-center justify-center" >
         <q-table
@@ -69,13 +76,30 @@
             </template>
         </q-table>
     </div>
+
+    <bar-chart titre="Stats Globales" :labels="labels" :data="dataValues" class="q-ml-md q-mr-md q-mt-xl"/>
+
+    <div class="row q-col-gutter-md q-mt-md">
+      <div class="col-12 col-md-4">
+        <shoot-chart titre="Shoot à 2pts" :labels="labelsShoot" :data="dataValuesShoot" />
+      </div>
+      <div class="col-12 col-md-4">
+        <shoot-chart titre="Shoot à 3pts" :labels="labelsShoot3pts" :data="dataValuesShoot3pts" />
+      </div>
+      <div class="col-12 col-md-4">
+        <shoot-chart titre="Lancers Francs" :labels="labelsLF" :data="dataValuesLF" />
+      </div>
+    </div>
+
   </template>
   
   <script setup lang="ts">
   import { computed, ref } from 'vue';
   import type { StatJoueur } from 'src/components/types/StatJoueurType';
+  import ShootChart from 'src/components/ChartComponent/ShootChart.vue'
+  import BarChart from 'src/components/ChartComponent/BarChart.vue'
   import type { QTableColumn } from 'quasar';
-import { useRouter } from 'vue-router';
+  import { useRouter } from 'vue-router';
   
   const props = defineProps<{ stats: StatJoueur[], idMatch: number | undefined }>();
   
@@ -147,7 +171,7 @@ import { useRouter } from 'vue-router';
         points_3pts: sumFields('tirs_3pts_reussis'),
         points_3pts_rate: sumFields('tirs_3pts_manques'),
         lancers: sumFields('lancers_francs_reussis'),
-        lancers_rate: sumFields('lancers_francs_manques'),
+        lancers_rate: sumFields('lancers_francs_rates'),
   
         taux_shoot: tirs_total > 0 ? Number((tirs_reussis / tirs_total * 100).toFixed(1)) : '-',
   
@@ -224,6 +248,69 @@ import { useRouter } from 'vue-router';
       console.error('Erreur lors de la navigation vers la page d\'ajout de stats :', error)
     }
   }
+
+  const excludedKeys = ['minutes', 'nom', 'prenom', 'points_2pts', 'points_2pts_rate', 'points_3pts', 'points_3pts_rate', 'lancers', 'lancers_rate']
+
+  const labels = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        !excludedKeys.includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValues = computed(() => {
+    return labels.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number
+    )
+  })
+
+  const labelsShoot = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        ['points_2pts', 'points_2pts_rate'].includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValuesShoot = computed(() => {
+    return labelsShoot.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number
+    )
+  })
+
+  const labelsShoot3pts = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        ['points_3pts', 'points_3pts_rate'].includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValuesShoot3pts = computed(() => {
+    return labelsShoot3pts.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number
+    )
+  })
+
+  const labelsLF = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        ['lancers', 'lancers_rate'].includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValuesLF = computed(() => {
+    return labelsLF.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number
+    )
+  })
+
   </script>
   
   <style scoped>
