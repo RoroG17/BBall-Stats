@@ -39,7 +39,11 @@ class Joueur extends Model
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public static function getAllJoueurs() {
-        return self::join('equipes', 'joueurs.Id_Equipe', '=', 'equipes.Id_Equipe')->select('joueurs.*', 'equipes.nom as equipe', 'equipes.logo as logo')->get();
+        return self::join('equipes', 'joueurs.Id_Equipe', '=', 'equipes.Id_Equipe')
+                    ->select('joueurs.*', 'equipes.nom as equipe', 'equipes.logo as logo')
+                    ->orderBy('nom')
+                    ->orderBy('prenom')
+                    ->get();
     }
 
     /**

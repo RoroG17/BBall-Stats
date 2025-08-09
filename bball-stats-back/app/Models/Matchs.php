@@ -55,6 +55,7 @@ class Matchs extends Model
                         'equipeDom.logo as logoDom',
                         'equipeExt.logo as logoExt'
                     )
+                    ->orderBy('date_match')
                     ->get();
     }
 
