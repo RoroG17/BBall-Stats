@@ -62,18 +62,72 @@
             </template>
         </q-table>
     </div>
+
+    <q-card class="q-pa-md shadow-2 rounded-borders bg-grey-1">
+      <!-- En-tête avec icône et titre -->
+      <q-card-section class="row items-center q-gutter-sm q-pb-none">
+        <q-icon name="bar_chart" size="md" color="primary" />
+        <div class="text-h6 text-primary">Statistique Moyenne</div>
+      </q-card-section>
+  
+      <!-- Ligne séparatrice -->
+      <q-separator color="primary" spaced />
+  
+      <!-- Section du graphique -->
+      <q-card-section class="q-pt-none">
+        <div class="q-pa-sm" style="height: 350px;">
+          <canvas ref="barChartCanvas" style="width: 100%; height: 100%;" />
+        </div>
+      </q-card-section>
+    </q-card>
+
+    <div class="row q-col-gutter-md q-mt-md">
+      <div class="col-12 col-md-4">
+        <shoot-chart titre="Shoot à 2pts" :labels="labelsShoot" :data="dataValuesShoot" />
+      </div>
+      <div class="col-12 col-md-4">
+        <shoot-chart titre="Shoot à 3pts" :labels="labelsShoot3pts" :data="dataValuesShoot3pts" />
+      </div>
+      <div class="col-12 col-md-4">
+        <shoot-chart titre="Lancers Francs" :labels="labelsLF" :data="dataValuesLF" />
+      </div>
+    </div>
+
+    <q-select v-model="attribut" style="max-width: 200px;" :options="listeAttribut" label="Statistique" outlined dense fill-input input-debounce="0" emit-value map-options :dropdown-icon="'arrow_drop_down'" color="primary" bg-color="white" class="q-ma-sm">
+      <template v-slot:prepend>
+        <q-icon name="insights" color="primary" />
+      </template>
+    </q-select>
+    <ScatterChart :matches="matches" :stat="attribut" />
   </template>
   
   <script setup lang="ts">
-  import { computed, ref } from 'vue';
+  import { computed, onMounted, ref, watch } from 'vue';
   import type { QTableColumn } from 'quasar';
   import type { StatMatch } from '../types/StatMatchType';
+  import ShootChart from '../ChartComponent/ShootChart.vue';
+  import {
+    Chart,
+    registerables,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+    Title,
+    Tooltip,
+    Legend
+  } from 'chart.js'
+import ScatterChart from '../ChartComponent/ScatterChart.vue';
   
+  Chart.register(...registerables, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
   const props = defineProps<{ stats: StatMatch[] }>();
   
   const periode = ref('Match Complet')
   const statPeriode = ref([1,2,3,4])
   const optionPeriode = ref(["Match Complet", "1QT", "2QT", "3QT", "4QT"]);
+
+  
+  const listeAttribut : string[] = ['Points', 'Passes Déc', 'Rebonds', 'Interceptions', 'contres', 'ballons perdues']
+  const attribut = ref('Points')
 
   function getPeriode(periode : string) {
     switch (periode) {
@@ -152,6 +206,46 @@
       };
     });
   });
+
+  const matches = computed(() =>
+    rows.value.map(row => {
+      const [h, m, s] = String(row.minutes).split(':').map(Number)
+      const hours = h || 0
+      const minutes = m || 0
+      const seconds = s || 0
+
+      const totalMinutes = hours * 60 + minutes + seconds / 60
+
+      switch (attribut.value) {
+        case 'Points' :
+          return {
+            minutes: parseFloat(totalMinutes.toFixed(2)),
+            data: row.points
+          }
+
+        case 'Passes Déc' :
+          return {
+            minutes: parseFloat(totalMinutes.toFixed(2)),
+            data: row.passes_decisives
+          }
+        
+        case 'Rebonds' :
+          return {
+            minutes: parseFloat(totalMinutes.toFixed(2)),
+            data: row.rebonds
+          }
+
+        default :
+          return {
+            minutes: parseFloat(totalMinutes.toFixed(2)),
+            data: 0
+          }
+      }
+    })
+  )
+
+
+
   
   const totalsRow = computed(() => {
     const total = {
@@ -205,6 +299,121 @@
   
     return total;
   });
+
+  const excludedKeys = ['minutes', 'nom', 'prenom', 'points_2pts', 'points_2pts_rate', 'points_3pts', 'points_3pts_rate', 'lancers', 'lancers_rate']
+
+  const labels = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        !excludedKeys.includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValues = computed(() => {
+    return labels.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number / 7
+    )
+  })
+
+  const labelsShoot = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        ['points_2pts', 'points_2pts_rate'].includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValuesShoot = computed(() => {
+    return labelsShoot.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number
+    )
+  })
+
+  const labelsShoot3pts = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        ['points_3pts', 'points_3pts_rate'].includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValuesShoot3pts = computed(() => {
+    return labelsShoot3pts.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number
+    )
+  })
+
+  const labelsLF = computed(() => {
+    return Object.keys(totalsRow.value).filter((key) => {
+      return (
+        ['lancers', 'lancers_rate'].includes(key) &&
+        typeof totalsRow.value[key as keyof typeof totalsRow.value] === 'number'
+      )
+    })
+  })
+
+  const dataValuesLF = computed(() => {
+    return labelsLF.value.map((key) =>
+      totalsRow.value[key as keyof typeof totalsRow.value] as number
+    )
+  })
+
+  const barChartCanvas = ref()
+  let chartInstance : Chart 
+  
+  const createChart = () => {
+  if (chartInstance) {
+    chartInstance.destroy()
+  }
+
+  chartInstance = new Chart(barChartCanvas.value, {
+      type: 'bar',
+      data: {
+        labels : labels.value,
+        datasets: [
+          {
+            label: 'Stats',
+            data: dataValues.value,
+            backgroundColor: 'rgba(255, 0, 0, 0.6)',
+            borderColor: 'rgba(255, 0, 0, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            min: 0,
+            max: 20,
+            ticks: {
+              stepSize: 10
+            },
+            title: {
+              display: true,
+              text: 'Stats'
+            }
+          }
+        }
+      }
+    })
+}
+
+onMounted(() => {
+  console.log(dataValues)
+  createChart()
+})
+
+// Recrée le graphique si les données changent
+watch(() => [labels, totalsRow], () => {
+  createChart()
+})
 </script>
   
 <style scoped>
