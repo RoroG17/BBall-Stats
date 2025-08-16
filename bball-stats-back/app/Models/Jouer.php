@@ -97,6 +97,12 @@ class Jouer extends Model
                     ->get();
     }
 
+    public static function getStatsSaison($id) {
+        return self::join('matchs', 'jouer.Id_Match', 'matchs.Id_Match')
+                    ->where('Id_Saison', $id)
+                    ->get();
+    }
+
     public static function getStatsMatch($id) {
         return self::join('joueurs', 'jouer.licence', 'joueurs.licence')
                     ->where('Id_Match', $id)

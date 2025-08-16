@@ -300,7 +300,7 @@ import ScatterChart from '../ChartComponent/ScatterChart.vue';
     return total;
   });
 
-  const excludedKeys = ['minutes', 'nom', 'prenom', 'points_2pts', 'points_2pts_rate', 'points_3pts', 'points_3pts_rate', 'lancers', 'lancers_rate']
+  const excludedKeys = ['minutes', 'nom', 'prenom', 'points_2pts', 'points_2pts_rate', 'points_3pts', 'points_3pts_rate', 'lancers', 'lancers_rate', 'taux_shoot']
 
   const labels = computed(() => {
     return Object.keys(totalsRow.value).filter((key) => {
@@ -313,7 +313,7 @@ import ScatterChart from '../ChartComponent/ScatterChart.vue';
 
   const dataValues = computed(() => {
     return labels.value.map((key) =>
-      totalsRow.value[key as keyof typeof totalsRow.value] as number / 7
+      totalsRow.value[key as keyof typeof totalsRow.value] as number / 8 //TODO
     )
   })
 
@@ -406,7 +406,7 @@ import ScatterChart from '../ChartComponent/ScatterChart.vue';
 }
 
 onMounted(() => {
-  console.log(dataValues)
+  //console.log(dataValues)
   createChart()
 })
 

@@ -83,9 +83,9 @@
   const matches = ref<MatchType[]>([])
 
     const selectedSaison = ref({
-      annees : "",
+      annees : "2024-2025",
       championnat : "",
-      categorie : ""
+      categorie : "U15G"
     })
 
     const saisons = ref<SaisonType[]>([])
@@ -125,20 +125,7 @@
     const optionCat = ref<string[]>([])
   const fetchGames = async () => {
   try {
-    const response = await axios.get('http://localhost:8000/api/matchs');
     const responseSaison = await axios.get('http://localhost:8000/api/saisons')
-
-    matches.value = (response.data || []).map((m: MatchType) => ({
-        idMatch: m.idMatch,
-        dateMatch: new Date(m.dateMatch),
-        numero: m.numero,
-        equipeDom: m.equipeDom,
-        equipeExt: m.equipeExt,
-        logoDom: m.logoDom,
-        logoExt: m.logoExt,
-        scoreDom: m.scoreDom || undefined,
-        scoreExt: m.scoreExt || undefined
-    }));
 
     saisons.value = (responseSaison.data || []).map((s : SaisonType) => ({
       id_Saison : s.Id_Saison,
@@ -170,7 +157,8 @@
     }
 };
 
-void fetchGames();  
+void fetchGames();
+void updateMatches();  
   </script>
   
   <style scoped>

@@ -36,9 +36,14 @@ class AppController extends Controller
     }
 
     public function addStats(Request $request) {
-        \Log::info($request->all());
         $stats = Jouer::createStats($request->all());
 
         return response()->json($stats)->header('Access-Control-Allow-Origin', '*');
+    }
+
+    public function getStatsEquipe($saison) {
+        $stats = Jouer::getStatsSaison($saison);
+
+        return response()->json($stats)->header('Access-Control-Allow-Origin', '*'); 
     }
 }
