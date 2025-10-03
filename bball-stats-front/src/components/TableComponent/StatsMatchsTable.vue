@@ -126,7 +126,7 @@ import ScatterChart from '../ChartComponent/ScatterChart.vue';
   const optionPeriode = ref(["Match Complet", "1QT", "2QT", "3QT", "4QT"]);
 
   
-  const listeAttribut : string[] = ['Points', 'Passes Déc', 'Rebonds', 'Interceptions', 'contres', 'ballons perdues']
+  const listeAttribut : string[] = ['Points', 'Passes Déc', 'Rebonds', 'Interceptions', 'Contres', 'Ballons perdus']
   const attribut = ref('Points')
 
   function getPeriode(periode : string) {
@@ -233,6 +233,24 @@ import ScatterChart from '../ChartComponent/ScatterChart.vue';
           return {
             minutes: parseFloat(totalMinutes.toFixed(2)),
             data: row.rebonds
+          }
+
+        case 'Interceptions' :
+          return {
+            minutes: parseFloat(totalMinutes.toFixed(2)),
+            data: row.interceptions
+          }
+
+        case 'Contres' :
+          return {
+            minutes: parseFloat(totalMinutes.toFixed(2)),
+            data: row.contres
+          }
+        
+        case 'Ballons perdus' :
+          return {
+            minutes: parseFloat(totalMinutes.toFixed(2)),
+            data: row.ballons_perdus
           }
 
         default :

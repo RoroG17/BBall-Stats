@@ -147,7 +147,7 @@ const createChart = () => {
   }
 
   onMounted(() => {
-    //console.log(props.data)
+    console.log(props.data)
     createChart()
   })
 

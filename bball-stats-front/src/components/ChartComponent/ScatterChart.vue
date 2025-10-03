@@ -97,7 +97,7 @@ const renderChart = () => {
           title: { display: true, text: props.stat, color: '#333', font: { weight: 'bold' } },
           beginAtZero: true,
           min: 0,
-          max: 20
+          max: 30
         }
       }
     }

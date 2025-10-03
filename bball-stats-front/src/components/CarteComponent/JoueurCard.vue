@@ -1,7 +1,12 @@
 <template>
     <q-card class="q-ma-md q-pa-md shadow-2 rounded-borders cursor-pointer" style="width: 250px;" @click="handleClick()">
-      <q-img :src="props.joueur.photo" alt="Photo du joueur" class="rounded-borders" />
-  
+      <div class="q-mb-md flex flex-center" style="height: 120px;">
+        <q-img 
+          :src="`http://localhost:8000/storage/joueur/${props.joueur.photo}`" 
+          alt="Photo du joueur" 
+          style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover;" 
+        />
+      </div>  
       <q-card-section>
         <div class="text-h6">{{ props.joueur.prenom }} {{ props.joueur.nom }}</div>
         <div class="text-subtitle2 text-grey">{{ props.joueur.civilite === 'M' ? 'Homme' : 'Femme' }}</div>

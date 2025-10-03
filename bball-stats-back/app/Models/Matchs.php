@@ -212,7 +212,9 @@ class Matchs extends Model
                         ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe');
 
         if ($data['annees'] != "") {
-            //TODO
+            list($start, $end) = explode('-', $data['annees'], 2);
+            $query->where('annee_debut', '=', $start);
+            $query->where('annee_fin', '=', $end);
         }
 
         if ($data['championnat'] != "") {

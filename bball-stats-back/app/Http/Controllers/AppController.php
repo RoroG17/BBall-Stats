@@ -43,7 +43,55 @@ class AppController extends Controller
 
     public function getStatsEquipe($saison) {
         $stats = Jouer::getStatsSaison($saison);
+        $total = Jouer::getTotalMatchSaison($saison);
 
-        return response()->json($stats)->header('Access-Control-Allow-Origin', '*'); 
+        $classPTSActuelle = Jouer::getClassPTS($saison);
+        $classPDActuelle = Jouer::getClassPD($saison);
+        $classRebActuelle = Jouer::getClassReb($saison);
+        $classIntActuelle = Jouer::getClassInt($saison);
+        $classContreActuelle = Jouer::getClassContre($saison);
+        $classBPActuelle = Jouer::getClassBP($saison);
+
+        $classShootActuelle = Jouer::getClassShoot($saison);
+        $class3PtsActuelle = Jouer::getClass3Pts($saison);
+        $classLFActuelle = Jouer::getClassLF($saison);
+
+        $classPTS = Jouer::getClassPTS();
+        $classPD = Jouer::getClassPD();
+        $classReb = Jouer::getClassReb();
+        $classInt = Jouer::getClassInt();
+        $classContre = Jouer::getClassContre();
+        $classBP = Jouer::getClassBP();
+
+        $classShoot = Jouer::getClassShoot();
+        $class3Pts = Jouer::getClass3Pts();
+        $classLF = Jouer::getClassLF();
+
+        return response()->json([
+                'stats' => $stats, 
+                'total' => $total,
+
+                'classPTSActuelle' => $classPTSActuelle,
+                'classPDActuelle' => $classPDActuelle,
+                'classRebActuelle' => $classRebActuelle,
+                'classIntActuelle' => $classIntActuelle,
+                'classContreActuelle' => $classContreActuelle,
+                'classBPActuelle' => $classBPActuelle,
+                
+                'classShootActuelle' => $classShootActuelle,
+                'class3PtsActuelle' => $class3PtsActuelle,
+                'classLFActuelle' => $classLFActuelle,
+
+                'classPTS' => $classPTS,
+                'classPD' => $classPD,
+                'classReb' => $classReb,
+                'classInt' => $classInt,
+                'classContre' => $classContre,
+                'classBP' => $classBP,
+
+                'classShoot' => $classShoot,
+                'class3Pts' => $class3Pts,
+                'classLF' => $classLF,
+            ])->header('Access-Control-Allow-Origin', '*'); 
     }
 }
