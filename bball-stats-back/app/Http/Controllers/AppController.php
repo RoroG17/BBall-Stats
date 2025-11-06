@@ -41,20 +41,20 @@ class AppController extends Controller
         return response()->json($stats)->header('Access-Control-Allow-Origin', '*');
     }
 
-    public function getStatsEquipe($saison) {
-        $stats = Jouer::getStatsSaison($saison);
-        $total = Jouer::getTotalMatchSaison($saison);
+    public function getStatsEquipe() {
+        $stats = Jouer::getStatsSaison(config('app.saison'));
+        $total = Jouer::getTotalMatchSaison(config('app.saison'));
 
-        $classPTSActuelle = Jouer::getClassPTS($saison);
-        $classPDActuelle = Jouer::getClassPD($saison);
-        $classRebActuelle = Jouer::getClassReb($saison);
-        $classIntActuelle = Jouer::getClassInt($saison);
-        $classContreActuelle = Jouer::getClassContre($saison);
-        $classBPActuelle = Jouer::getClassBP($saison);
+        $classPTSActuelle = Jouer::getClassPTS(config('app.saison'));
+        $classPDActuelle = Jouer::getClassPD(config('app.saison'));
+        $classRebActuelle = Jouer::getClassReb(config('app.saison'));
+        $classIntActuelle = Jouer::getClassInt(config('app.saison'));
+        $classContreActuelle = Jouer::getClassContre(config('app.saison'));
+        $classBPActuelle = Jouer::getClassBP(config('app.saison'));
 
-        $classShootActuelle = Jouer::getClassShoot($saison);
-        $class3PtsActuelle = Jouer::getClass3Pts($saison);
-        $classLFActuelle = Jouer::getClassLF($saison);
+        $classShootActuelle = Jouer::getClassShoot(config('app.saison'));
+        $class3PtsActuelle = Jouer::getClass3Pts(config('app.saison'));
+        $classLFActuelle = Jouer::getClassLF(config('app.saison'));
 
         $classPTS = Jouer::getClassPTS();
         $classPD = Jouer::getClassPD();

@@ -83,9 +83,9 @@
   const matches = ref<MatchType[]>([])
 
     const selectedSaison = ref({
-      annees : "2024-2025",
+      annees : "2025-2026",
       championnat : "",
-      categorie : "U15G"
+      categorie : ""
     })
 
     const saisons = ref<SaisonType[]>([])

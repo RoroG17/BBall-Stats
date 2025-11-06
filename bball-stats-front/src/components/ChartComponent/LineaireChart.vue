@@ -46,7 +46,7 @@
   const chartCanvas = ref<HTMLCanvasElement | null>(null)
   
   onMounted(() => {
-    //console.log(props.data)
+    console.log(props.data)
     if (!chartCanvas.value) return
   
     // Préparation des labels et datasets

@@ -85,7 +85,7 @@
   const classLF = ref([])
   const fetchGames = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/stats/1')
+      const response = await axios.get('http://localhost:8000/stats')
       donnee.value = response.data.stats
       total.value = response.data.total
 
