@@ -53,7 +53,8 @@ class Matchs extends Model
                         'matchs.score_domicile as scoreDom',
                         'matchs.score_exterieur as scoreExt',
                         'equipeDom.logo as logoDom',
-                        'equipeExt.logo as logoExt'
+                        'equipeExt.logo as logoExt',
+                        'saisons.id_Saison as idSaison'
                     )
                     ->orderBy('date_match')
                     ->get();
