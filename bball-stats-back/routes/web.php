@@ -6,6 +6,7 @@ use App\Http\Controllers\JouerResource;
 use App\Http\Controllers\JoueurResource;
 use App\Http\Controllers\MatchResource;
 use App\Http\Controllers\SaisonResource;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -25,3 +26,6 @@ Route::post('recherche/joueurs', [AppController::class, 'rechercheJoueur']);
 
 Route::post('add/stats', [AppController::class, 'addStats']);
 Route::get('stats', [AppController::class, 'getStatsEquipe']);
+
+Route::post('connect', [UserController::class, 'connect']);
+Route::post('update', [UserController::class, 'updatePassword']);
