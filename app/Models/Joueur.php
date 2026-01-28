@@ -174,4 +174,15 @@ class Joueur extends Model
     return $query->select('joueurs.*', 'equipes.nom as equipe', 'equipes.logo as logo')->get();
 }
 
+    public static function getSaisonsJoueur($licence) {
+        return self::join('jouer', 'joueurs.licence', '=', 'jouer.licence')
+                    ->join('matchs', 'jouer.Id_Match', '=', 'matchs.Id_Match')
+                    ->join('saisons', 'matchs.Id_Saison', '=', 'saisons.Id_Saison')
+                    ->where('joueurs.licence', $licence)
+                    ->distinct()
+                    ->orderBy('saisons.annee_debut')
+                    ->select('saisons.*')
+                    ->get();
+    }
+
 }

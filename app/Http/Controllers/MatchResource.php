@@ -43,10 +43,12 @@ class MatchResource extends Controller
     {
         $match = Matchs::getMatch($id);
         $stats = Jouer::getStatsMatch($id);
+	\Log::info($match->Id_Saions);
+	$statsAvg = Jouer::getStatsAvg($match->Id_Saison);
         if (!$match) {
             return response()->json(['message' => 'Match non trouvé'], 404);
         }
-        return response()->json(["match" => $match, "stats" => $stats])->header('Access-Control-Allow-Origin', '*');
+        return response()->json(["match" => $match, "stats" => $stats, "avg" => $statsAvg])->header('Access-Control-Allow-Origin', '*');
     }
 
     /**

@@ -29,3 +29,5 @@ Route::get('stats', [AppController::class, 'getStatsEquipe']);
 
 Route::post('connect', [UserController::class, 'connect']);
 Route::post('update', [UserController::class, 'updatePassword']);
+
+Route::get('saisons/{licence}', [AppController::class, 'getSaisonsJoueur']);

@@ -347,7 +347,9 @@ class Jouer extends Model
 
     public static function getStatsMatch($id) {
         return self::join('joueurs', 'jouer.licence', 'joueurs.licence')
+		    ->join('equipes', 'joueurs.Id_Equipe', 'equipes.Id_Equipe')
                     ->where('Id_Match', $id)
+		    ->select('joueurs.*', 'jouer.*', 'equipes.logo', 'equipes.nom AS equipe')
                     ->get();
     }
 
@@ -355,13 +357,91 @@ class Jouer extends Model
         return self::join('matchs', 'jouer.Id_Match', '=', 'matchs.Id_Match')
             ->join('equipes as equipeDom', 'matchs.equipe_domicile', '=', 'equipeDom.Id_Equipe')
             ->join('equipes as equipeExt', 'matchs.equipe_exterieur', '=', 'equipeExt.Id_Equipe')
+	    ->join('saisons', 'matchs.Id_Saison', '=', 'saisons.Id_Saison')
             ->select(
                 'jouer.*',
+		'saisons.Id_Saison',
                 DB::raw("CONCAT(equipeDom.nom, ' - ', equipeExt.nom) as match_libelle")
             )
             ->where('jouer.licence', $id)
+	    ->orderby('matchs.date_match')
             ->get();
     }
+
+    public static function getStatsAvg($id) {
+$sub = DB::table('jouer')
+    ->join('matchs', 'matchs.Id_Match', '=', 'jouer.Id_Match')
+    ->where('Id_Saison', $id)
+    ->selectRaw('
+        matchs.Id_Match,
+        matchs.Id_Saison,
+
+        SUM(
+            jouer.q1_tirs_2pts_reussis * 2 + jouer.q1_tirs_3pts_reussis * 3 + jouer.q1_lancers_francs_reussis +
+            jouer.q2_tirs_2pts_reussis * 2 + jouer.q2_tirs_3pts_reussis * 3 + jouer.q2_lancers_francs_reussis +
+            jouer.q3_tirs_2pts_reussis * 2 + jouer.q3_tirs_3pts_reussis * 3 + jouer.q3_lancers_francs_reussis +
+            jouer.q4_tirs_2pts_reussis * 2 + jouer.q4_tirs_3pts_reussis * 3 + jouer.q4_lancers_francs_reussis
+        ) AS points_par_match,
+
+        SUM(
+            jouer.q1_passes_decisives +
+            jouer.q2_passes_decisives +
+            jouer.q3_passes_decisives +
+            jouer.q4_passes_decisives
+        ) AS assists_par_match,
+
+        SUM(
+            jouer.q1_rebonds_offensifs + jouer.q1_rebonds_defensifs +
+            jouer.q2_rebonds_offensifs + jouer.q2_rebonds_defensifs +
+            jouer.q3_rebonds_offensifs + jouer.q3_rebonds_defensifs +
+            jouer.q4_rebonds_offensifs + jouer.q4_rebonds_defensifs
+        ) AS rebonds_par_match,
+
+        SUM(
+            jouer.q1_interceptions +
+            jouer.q2_interceptions +
+            jouer.q3_interceptions +
+            jouer.q4_interceptions
+        ) AS interceptions_par_match,
+
+        SUM(
+            jouer.q1_contres +
+            jouer.q2_contres +
+            jouer.q3_contres +
+            jouer.q4_contres
+        ) AS contres_par_match,
+
+        SUM(
+            jouer.q1_ballons_perdus +
+            jouer.q2_ballons_perdus +
+            jouer.q3_ballons_perdus +
+            jouer.q4_ballons_perdus
+        ) AS bp_par_match,
+
+        SUM(
+            jouer.q1_fautes +
+            jouer.q2_fautes +
+            jouer.q3_fautes +
+            jouer.q4_fautes
+        ) AS fautes_par_match
+    ')
+    ->groupBy('matchs.Id_Match', 'matchs.Id_Saison');
+
+return DB::query()
+    ->fromSub($sub, 't')
+    ->selectRaw('
+        t.Id_Saison,
+        AVG(t.points_par_match) AS Points,
+        AVG(t.assists_par_match) AS Assists,
+        AVG(t.rebonds_par_match) AS Rebonds,
+        AVG(t.interceptions_par_match) AS Interceptions,
+        AVG(t.contres_par_match) AS Contres,
+        AVG(t.bp_par_match) AS BP,
+        AVG(t.fautes_par_match) AS Fautes
+    ')
+    ->groupBy('t.Id_Saison')
+    ->first();
+}
 
 
     public static function getStats($id) {

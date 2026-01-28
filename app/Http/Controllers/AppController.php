@@ -94,4 +94,10 @@ class AppController extends Controller
                 'classLF' => $classLF,
             ])->header('Access-Control-Allow-Origin', '*'); 
     }
+
+
+   public function getSaisonsJoueur($licence) {
+        $saisons = Joueur::getSaisonsJoueur($licence);
+        return response()->json($saisons)->header('Access-Control-Allow-Origin', '*');
+    }
 }

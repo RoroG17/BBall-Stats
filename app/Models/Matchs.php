@@ -78,7 +78,8 @@ class Matchs extends Model
                         'matchs.score_domicile as scoreDom',
                         'matchs.score_exterieur as scoreExt',
                         'equipeDom.logo as logoDom',
-                        'equipeExt.logo as logoExt'
+                        'equipeExt.logo as logoExt',
+			'matchs.Id_Saison'
                     )
                     ->find($id);
     } 
