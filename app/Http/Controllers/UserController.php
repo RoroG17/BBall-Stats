@@ -16,7 +16,11 @@ class UserController extends Controller
             'password' => 'nullable|string',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $user = User::where('username', $request->username)
+			->leftJoin('joueurs', 'users.joueur', 'joueurs.licence')
+			->leftJoin('equipes', 'joueurs.Id_Equipe', 'equipes.Id_Equipe')
+			->select('users.*', 'equipes.nom AS equipe')
+			->first();
 
         if (!$user) {
             return response()->json(['message' => 'Utilisateur non trouvé'], 404);
@@ -40,9 +44,10 @@ class UserController extends Controller
 	$safeUser = [
         	'username' => $user->username,
         	'joueur'   => $user->joueur,
+		'equipe' => $user->equipe
     	];
 
-
+\Log::info($safeUser);
         // 4) Connexion OK
         return response()->json(['user'=> $safeUser, 'message' => 'Connexion réussie'], 200);
     }

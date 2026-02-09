@@ -350,6 +350,8 @@ class Jouer extends Model
 		    ->join('equipes', 'joueurs.Id_Equipe', 'equipes.Id_Equipe')
                     ->where('Id_Match', $id)
 		    ->select('joueurs.*', 'jouer.*', 'equipes.logo', 'equipes.nom AS equipe')
+		    ->orderBy('joueurs.nom')
+		    ->orderBy('joueurs.prenom')
                     ->get();
     }
 
