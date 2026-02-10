@@ -1,1 +1,2 @@
-bball-stats-front
+./vendor
+.env
