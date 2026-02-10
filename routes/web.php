@@ -7,6 +7,7 @@ use App\Http\Controllers\JoueurResource;
 use App\Http\Controllers\MatchResource;
 use App\Http\Controllers\SaisonResource;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Participer;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,6 +19,7 @@ Route::resource('/api/joueurs', JoueurResource::class);
 Route::resource('api/saisons', SaisonResource::class);
 Route::resource('api/matchs', MatchResource::class);
 Route::resource('api/stats', JouerResource::class);
+Route::resource('api/participer', Participer::class);
 
 Route::get('/accueil', [AppController::class, 'accueil']);
 
