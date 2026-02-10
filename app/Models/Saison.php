@@ -29,7 +29,7 @@ class Saison extends Model
     public $incrementing = true;
     public $timestamps = false;
 
-    protected $fillable = ['annee_debut', 'annee_fin', 'championnat', 'categorie'];
+    protected $fillable = ['annee_debut', 'annee_fin', 'championnat', 'categorie', "equipe"];
 
     /**
      * Récupère toutes les saisons.
@@ -61,10 +61,10 @@ class Saison extends Model
     }
 
     public static function getStatsSaison($id) {
-        return self::join('matchs', 'saison.Id_Saison', 'matchs.Id_Saison')
+        return self::join('matchs', 'saisons.Id_Saison', 'matchs.Id_Saison')
                     ->join('jouer', 'matchs.Id_Match', 'jouer.Id_Match')
                     ->join('joueurs', 'jouer.licence', 'joueurs.licence')
-                    ->join('equipes', 'matchs.Id_Equipe', 'equipe.Id_Equipe')
+                    ->join('equipes', 'matchs.Id_Equipe', 'equipes.Id_Equipe')
                     ->where('saisons.Id_Saison', $id)
                     ->select('joueurs.*', 'jouer.*', 'matchs.*', 'equipes.nom as equipe')
                     ->get();
@@ -82,6 +82,7 @@ class Saison extends Model
             'annee_fin' => $data['annee_fin'] ?? $data->annee_fin,
             'championnat' => $data['championnat'] ?? $data->championnat,
             'categorie' => $data['categorie'] ?? $data->categorie,
+            'equipe' => $data['equipe'] ?? $data->equipe,
         ]);
     }
 
@@ -96,6 +97,7 @@ class Saison extends Model
         $this->annee_fin = $data['annee_fin'] ?? $data->annee_fin;
         $this->championnat = $data['championnat'] ?? $data->championnat;
         $this->categorie = $data['categorie'] ?? $data->categorie;
+        $this->equipe = $data['equipe'] ?? $data->equipe;
 
         return $this->save();
     }
